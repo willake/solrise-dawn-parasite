@@ -1,7 +1,7 @@
 import { scheduleJob } from "node-schedule";
 import * as TelegramBot from "node-telegram-bot-api";
 import { SolriseRpcClient, AccountInfo, Account } from "./utils/solriseRpcClient";
-import { getTokenName } from "./utils/tokens";
+import { getToken } from "./utils/tokens";
 import { PublicKey } from "@solana/web3.js";
 import { SolriseApiClient } from "./utils/solriseApiClient";
 import { config } from "dotenv";
@@ -39,7 +39,7 @@ async function main() {
   
     if(myInvestingToken.mint != targetInvestingToken.mint) 
     {
-      sendNotification(targetInvestingToken.name);
+      sendNotification(targetInvestingToken.fullName, targetInvestingToken.name);
     }
     else
     {
@@ -71,6 +71,7 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
   );
 
   let investingToken: InvestingToken = {
+    fullName: '',
     name: '',
     mint: '',
     amount: 0
@@ -83,9 +84,15 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
         const info = a.data.parsed.info;
 
         if(info.tokenAmount.uiAmount > investingToken.amount) {
-          investingToken.name = getTokenName(info.mint)
-          investingToken.mint = info.mint;
-          investingToken.amount = info.tokenAmount.uiAmount;
+          const token = getToken(info.mint);
+
+          if(token)
+          {
+            investingToken.fullName = token.fullName;
+            investingToken.name = token.name.toUpperCase();
+            investingToken.mint = info.mint;
+            investingToken.amount = info.tokenAmount.uiAmount;
+          }
         }
       }
 
@@ -102,17 +109,18 @@ function logAccountStatus(myInvestingToken: InvestingToken, targetInvestingToken
   console.log(`Target - ${JSON.stringify(targetInvestingToken)}`);
 }
 
-function sendNotification(targetTokenName: string) {
+function sendNotification(tokenFullName: string, tokenName: string) {
   console.log(`=====================`);
-  console.log(`請將資金轉移到 ${targetTokenName}`);
-  console.log(`請將資金轉移到 ${targetTokenName}`);
-  console.log(`請將資金轉移到 ${targetTokenName}`);
+  console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
+  console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
+  console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
   console.log(`=====================`);
 
-  bot.sendMessage(CHAT_ID, `請將資金轉移到 ${targetTokenName}`)
+  bot.sendMessage(CHAT_ID, `請將資金轉移到 ${tokenFullName}(${tokenName})`)
 }
 
 interface InvestingToken {
+  fullName: string,
   name: string
   mint: string,
   amount: number
