@@ -1,5 +1,5 @@
 # Solrise Dawn Parasite
-這是程式是為了在 Solrise 的投資比賽中取得排名而撰寫的，用途是寄生目標的投資策略來跟單，另外有 telegram 通知的功能。
+這個程式是為了在 Solrise 的投資比賽中取得排名而撰寫的，用途是寄生目標的投資策略來跟單，另外有 telegram 通知的功能。
 
 ## 安裝方式
 
@@ -23,19 +23,19 @@ yarn
 
 ```
 ## .env
-MY_FUND_ID=${MY_FUND_ID} // 自己的 id
-TARGET_FUND_ID=${TARGET_FUND_ID} // 目標的 id
-TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN} // 自己創的 tg 機器人 token
-CHAT_ID=${CHAT_ID} // 和機器人的 chat id
+MY_FUND_ID=${MY_FUND_ID} // 自己的 fund id
+TARGET_FUND_ID=${TARGET_FUND_ID} // 目標的 fund id
+TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN} // 自己創的 telegram 機器人 token
+CHAT_ID=${CHAT_ID} // 和機器人對話的 chat id
 ```
 
-### 如何找到 Fund Id
+### 如何找到 Fund ID
 ![fund-id-demo](./fund-id-demo.jpg)
 
 如上圖所示，進入到某個基金的頁面，網址中 funds/ 後面的一串號碼就是 fund id
 
 ### 如何取得機器人 Token
-可以照著[Teleram 教學文件](https://core.telegram.org/bots)來操作已創立機器人
+可以照著 [Teleram 教學文件](https://core.telegram.org/bots)來操作已創立機器人
 
 簡單的步驟就是把 [BotFather](https://t.me/botfather) 加到好友，照著他寫的指示做，就會得到 token 了
 
