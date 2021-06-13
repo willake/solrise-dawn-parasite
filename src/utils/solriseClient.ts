@@ -76,7 +76,7 @@ export class SolriseClient {
 
   public getAccountInfo(pubKey: string)
   {
-    return this._post<RpcResponse>({
+    return this._post<RpcResponse<AccountInfo<string[]>>>({
       method: 'getAccountInfo',
       params: [pubKey, {encoding: 'base64', commitment: 'confirmed'}]
     } as RpcPayload)
@@ -84,7 +84,7 @@ export class SolriseClient {
 
   public getMultipleAccounts(accounts: string[])
   {
-    return this._post<RpcResponse>({
+    return this._post<RpcResponse<any[]>>({
       method: 'getMultipleAccounts',
       params: [accounts, {encoding: 'jsonParsed', commitment: 'confirmed'}]
     } as RpcPayload)
@@ -96,15 +96,15 @@ export interface RpcPayload {
   params: any[]
 }
 
-export interface RpcResponse {
+export interface RpcResponse<T> {
   jsonRpc: string,
-  result: RpcResult,
+  result: RpcResult<T>,
   id: number
 }
 
-export interface RpcResult {
+export interface RpcResult<T> {
   context: RpcResponseContext,
-  value: any[]
+  value: T
 }
 
 export interface RpcResponseContext {

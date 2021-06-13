@@ -2,6 +2,8 @@ import { scheduleJob } from "node-schedule";
 import * as TelegramBot from "node-telegram-bot-api";
 import { SolriseClient, AccountInfo, Account } from "./utils/solriseClient";
 import { getTokenName } from "./utils/tokens";
+import { FundAccountDataLayout } from "./utils/layout";
+import { PublicKey } from "@solana/web3.js";
 
 const solriseClient = new SolriseClient();
 
@@ -28,6 +30,19 @@ const targetAccounts = [
 
 const telegramToken = '1734418682:AAH2i6kAtvHjdVerH5jq-scarylurjlWb14';
 const chatId = 1128561501;
+
+solriseClient
+  .getAccountInfo("D38UHywhBhHopYWKXTtVZG3mx5Yq8HQMkcDS6Sh2u99R")
+  .then(res => {
+    const info = res.data.result.value;
+    const data = Buffer.from(info.data[0]);
+    const fundInfo = FundAccountDataLayout.decode(data);
+
+    for (let accountId in fundInfo.assetMintAccounts) {
+      console.log(new PublicKey(fundInfo.assetMintAccounts[accountId]).toString());
+    }
+  })
+  .catch(e => console.log(e));
 
 async function main() {
   const myAccountsRes = await solriseClient.getMultipleAccounts(
@@ -111,10 +126,10 @@ function getAllInMint(accountsInfo: AccountInfo<Account>[]) {
   return allInMint; 
 }
 
-main()
+// main()
 
-scheduleJob(
-  '*/30 * * * * *',
-  () => main()
-);
+// scheduleJob(
+//   '*/30 * * * * *',
+//   () => main()
+// );
 
