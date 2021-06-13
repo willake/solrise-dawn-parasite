@@ -29,6 +29,11 @@ TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN} // 自己創的 tg 機器人 token
 CHAT_ID=${CHAT_ID} // 和機器人的 chat id
 ```
 
+### 如何找到 Fund Id
+![fund-id-demo](./fund-id-demo.jpg)
+
+如上圖所示，進入到某個基金的頁面，網址中 funds/ 後面的一串號碼就是 fund id
+
 ### 如何取得機器人 Token
 可以照著[Teleram 教學文件](https://core.telegram.org/bots)來操作已創立機器人
 
@@ -39,7 +44,7 @@ CHAT_ID=${CHAT_ID} // 和機器人的 chat id
 ```
 yarn collect-chat-id
 ```
-最後就會得到 chat id，這樣設定好後需要更換投資方向的時候就能夠收到 telegram 機器人的通知
+最後就會得到 chat id，這樣設定好後需要更換投資方向的時候就能夠收到 telegram 機器人的通知，建議可以把機器人的通知音效另外設定，可以比較容易分辨是來自機器的人通知，路徑是 Settings => Notifications and Sounds => Message Notifications => Exception
 
 ### 執行方式
 ```
