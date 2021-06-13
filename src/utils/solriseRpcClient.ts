@@ -26,7 +26,7 @@ export class SolriseRpcClient {
 
     this.axiosInstance = axios.create({
       baseURL: SOLRISE_RPC,
-      timeout: 5000,
+      timeout: 8000,
       headers: {
         'accept': 'application/json',
         'Content-Type': 'application/json'
