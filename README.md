@@ -36,9 +36,6 @@ yarn collect-chat-id
 
 ## run dev
 yarn dev
-
-## build
-yarn build
 ```
 
 ### 如何取得 Chat ID
