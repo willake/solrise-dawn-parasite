@@ -29,6 +29,9 @@ TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN} // 自己創的 tg 機器人 token
 CHAT_ID=${CHAT_ID} // 和機器人的 chat id
 ```
 
+### 如何找到 Fund Id
+![fund-id-demo](./fund-id-demo.jpg)
+
 ### 如何取得機器人 Token
 可以照著[Teleram 教學文件](https://core.telegram.org/bots)來操作已創立機器人
 
