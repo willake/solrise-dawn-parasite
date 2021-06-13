@@ -44,7 +44,9 @@ CHAT_ID=${CHAT_ID} // 和機器人的 chat id
 ```
 yarn collect-chat-id
 ```
-最後就會得到 chat id，這樣設定好後需要更換投資方向的時候就能夠收到 telegram 機器人的通知，建議可以把機器人的通知音效另外設定，可以比較容易分辨是來自機器的人通知，路徑是 Settings => Notifications and Sounds => Message Notifications => Exception
+最後就會得到 chat id，這樣設定好後需要更換投資方向的時候就能夠收到 telegram 機器人的通知
+
+建議可以把機器人的通知音效另外設定，能夠比較容易分辨是來自機器的人通知，路徑是在 Telegram 畫面 Settings => Notifications and Sounds => Message Notifications => Exception
 
 ### 執行方式
 ```
