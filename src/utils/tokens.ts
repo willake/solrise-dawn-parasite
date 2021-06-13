@@ -117,7 +117,7 @@ export function getTokenName(mint: string) {
     
     if(token)
     {
-        return token.name;
+        return token.name.toUpperCase();
     }
     else
     {
