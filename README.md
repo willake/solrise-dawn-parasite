@@ -50,8 +50,13 @@ yarn collect-chat-id
 
 ### 執行方式
 ```
-## run dev
+## 直接以 ts-node 執行
 yarn dev
+
+## 或是建置出來後再執行
+yarn build
+
+node ./dist/main.js
 ```
 
 ### 定時
