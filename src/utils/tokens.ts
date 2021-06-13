@@ -207,12 +207,12 @@ export interface Token {
     mint: string  
 } 
 
-export function getTokenName(mint: string) {
+export function getToken(mint: string) {
     const token = TOKENMAPS.find(token => token.mint == mint);
     
     if(token)
     {
-        return token.name.toUpperCase();
+        return token;
     }
     else
     {
