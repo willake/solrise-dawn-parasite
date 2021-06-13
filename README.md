@@ -16,15 +16,6 @@ npm install -g ts-node
 
 ## install packages
 yarn
-
-## collect chat id
-yarn collect-chat-id
-
-## run dev
-yarn dev
-
-## build
-yarn build
 ```
 
 ### 設定 .env
@@ -40,8 +31,8 @@ CHAT_ID=${CHAT_ID} // 和機器人的 chat id
 
 ### 執行方式
 ```
-## install packages
-yarn
+## collect chat id
+yarn collect-chat-id
 
 ## run dev
 yarn dev
