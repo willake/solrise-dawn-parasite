@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node ./src/main.ts",
+    "collect-chat-id": "ts-node ./src/chatIdCollector.ts",
     "build": "tsc"
   },
   "devDependencies": {

@@ -1,4 +1,3 @@
-import { PublicKey } from "@solana/web3.js";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import Bottleneck from 'bottleneck';
 import * as rax from 'retry-axios';
@@ -14,7 +13,7 @@ const FAILED_RESPONSE = {
   request: {}
 } as AxiosResponse;
 
-export class SolriseClient {
+export class SolriseRpcClient {
   private axiosInstance: AxiosInstance;
   private limiter: Bottleneck;
 
@@ -51,20 +50,6 @@ export class SolriseClient {
       
       return config;
     });
-  }
-
-  private _get<T>(params: any = {}) {
-    return this.limiter.schedule(
-      () => this.axiosInstance
-        .get<T>('', params)
-    );
-  }
-
-  private _delete<T>(params: any = {}) {
-    return this.limiter.schedule(
-      () => this.axiosInstance
-        .delete<T>('', params)
-    );
   }
 
   private _post<T>(data: any = {}) {
