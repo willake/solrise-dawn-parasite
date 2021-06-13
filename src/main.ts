@@ -39,9 +39,7 @@ async function main() {
   
     if(myInvestingToken.mint != targetInvestingToken.mint) 
     {
-      sendNotification(
-        getTokenName(targetInvestingToken.mint)
-      );
+      sendNotification(targetInvestingToken.name);
     }
     else
     {
@@ -73,6 +71,7 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
   );
 
   let investingToken: InvestingToken = {
+    name: '',
     mint: '',
     amount: 0
   };
@@ -84,6 +83,7 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
         const info = a.data.parsed.info;
 
         if(info.tokenAmount.uiAmount > investingToken.amount) {
+          investingToken.name = getTokenName(info.mint)
           investingToken.mint = info.mint;
           investingToken.amount = info.tokenAmount.uiAmount;
         }
@@ -104,15 +104,16 @@ function logAccountStatus(myInvestingToken: InvestingToken, targetInvestingToken
 
 function sendNotification(targetTokenName: string) {
   console.log(`=====================`);
-  console.log(`Alert! Should modify your fund to ${targetTokenName}`);
-  console.log(`Alert! Should modify your fund to ${targetTokenName}`);
-  console.log(`Alert! Should modify your fund to ${targetTokenName}`);
+  console.log(`請將資金轉移到 ${targetTokenName}`);
+  console.log(`請將資金轉移到 ${targetTokenName}`);
+  console.log(`請將資金轉移到 ${targetTokenName}`);
   console.log(`=====================`);
 
-  bot.sendMessage(CHAT_ID, `Alert! Should modify your fund to ${targetTokenName}`)
+  bot.sendMessage(CHAT_ID, `請將資金轉移到 ${targetTokenName}`)
 }
 
 interface InvestingToken {
+  name: string
   mint: string,
   amount: number
 }
