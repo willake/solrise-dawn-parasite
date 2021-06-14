@@ -11,11 +11,15 @@ config();
 const solriseApiClient = new SolriseApiClient();
 const solriseRpcClient = new SolriseRpcClient();
 
-const MY_FUND_ID = new PublicKey(process.env.MY_FUND_ID);
 const TARGET_FUND_ID = new PublicKey(process.env.TARGET_FUND_ID);
 
-var myAssetAccounts: PublicKey[] = [];
 var targetAssetAccounts: PublicKey[] = [];
+var targetInvestingToken: InvestingToken = {
+  fullName: '',
+  name: '',
+  mint: '',
+  amount: 0
+};
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
@@ -24,22 +28,20 @@ const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: false });
 
 async function main() {
 
-  const myInvestingToken = await getInvestingToken(myAssetAccounts);
-
-  const targetInvestingToken = await getInvestingToken(targetAssetAccounts);
+  const investingToken = await getInvestingToken(targetAssetAccounts);
 
   console.log(`******************`);
 
-  if(myInvestingToken.amount < 5 || targetInvestingToken.amount < 5) {
+  if(investingToken.amount < 5) {
     console.log(`investing token was not found. now fetch newest accounts...`);
     await fetchAccounts();
   }
   else {
-    logAccountStatus(myInvestingToken, targetInvestingToken);
+    logAccountStatus(investingToken);
   
-    if(myInvestingToken.mint != targetInvestingToken.mint) 
+    if(targetInvestingToken.mint != investingToken.mint) 
     {
-      sendNotification(targetInvestingToken.fullName, targetInvestingToken.name);
+      sendNotification(investingToken.fullName, investingToken.name);
     }
     else
     {
@@ -50,13 +52,13 @@ async function main() {
   }
 
   console.log(`******************`);
+
+  targetInvestingToken = investingToken;
 }
 
 async function fetchAccounts() {
-  const myFund = (await solriseApiClient.getFund(MY_FUND_ID)).data.data;
   const targetFund = (await solriseApiClient.getFund(TARGET_FUND_ID)).data.data;
 
-  myAssetAccounts = myFund.assets.map(asset => new PublicKey(asset.pubkey));
   targetAssetAccounts = targetFund.assets.map(asset => new PublicKey(asset.pubkey));
 }
 
@@ -102,21 +104,23 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
   return investingToken; 
 }
 
-function logAccountStatus(myInvestingToken: InvestingToken, targetInvestingToken: InvestingToken) {
+function logAccountStatus(investingToken: InvestingToken) {
   const now = new Date();
   console.log(`Now - ${now.toLocaleTimeString()}`);
-  console.log(`Mine - ${JSON.stringify(myInvestingToken)}`);
-  console.log(`Target - ${JSON.stringify(targetInvestingToken)}`);
+  console.log(`Target - ${JSON.stringify(investingToken)}`);
 }
 
 function sendNotification(tokenFullName: string, tokenName: string) {
+  const now = new Date();
+  const timeString = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Taipei' });
+  const message = `${timeString} 將資金轉移到 ${tokenFullName}(${tokenName})`;
   console.log(`=====================`);
-  console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
-  console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
-  console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
+  console.log(message);
+  console.log(message);
+  console.log(message);
   console.log(`=====================`);
 
-  bot.sendMessage(CHAT_ID, `請將資金轉移到 ${tokenFullName}(${tokenName})`)
+  bot.sendMessage(CHAT_ID, message);
 }
 
 interface InvestingToken {
