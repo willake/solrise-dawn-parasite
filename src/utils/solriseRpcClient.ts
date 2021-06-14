@@ -5,7 +5,7 @@ import * as rax from 'retry-axios';
 const SOLRISE_RPC = 'https://api-solrise.devnet.rpcpool.com/';
 
 const FAILED_RESPONSE = {
-  data: { success: false, result: null},
+  data: { id: 0, jsonrpc: "2.0", result: null },
   status: 0,
   statusText: "failed",
   headers: "none",

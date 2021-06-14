@@ -39,12 +39,10 @@ async function main() {
   else {
     logAccountStatus(investingToken);
   
-    if(targetInvestingToken.mint != investingToken.mint) 
-    {
+    if(targetInvestingToken.mint != investingToken.mint) {
       sendNotification(investingToken.fullName, investingToken.name);
     }
-    else
-    {
+    else  {
       console.log(`=====================`);
       console.log(`Noting to change`);
       console.log(`=====================`);
@@ -59,8 +57,7 @@ async function main() {
 async function fetchAccounts() {
   const targetFundRes = await solriseApiClient.getFund(TARGET_FUND_ID);
 
-  if(targetFundRes.data.data === null || targetFundRes.data.data === undefined)
-  {
+  if(targetFundRes.data.data === null || targetFundRes.data.data === undefined) {
     return;
   }
 
@@ -82,8 +79,7 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
     amount: 0
   };
 
-  if(getAccountsRes.data.result === null || getAccountsRes.data.result === undefined)
-  {
+  if(getAccountsRes.data.result === null) {
     return investingToken;
   }
 
@@ -100,8 +96,7 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
         if(info.tokenAmount.uiAmount > investingToken.amount) {
           const token = getToken(info.mint);
 
-          if(token)
-          {
+          if(token) {
             investingToken.fullName = token.fullName;
             investingToken.name = token.name.toUpperCase();
             investingToken.mint = info.mint;
