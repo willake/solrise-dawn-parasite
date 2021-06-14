@@ -57,7 +57,14 @@ async function main() {
 }
 
 async function fetchAccounts() {
-  const targetFund = (await solriseApiClient.getFund(TARGET_FUND_ID)).data.data;
+  const targetFundRes = await solriseApiClient.getFund(TARGET_FUND_ID);
+
+  if(targetFundRes.data.data === null || targetFundRes.data.data === undefined)
+  {
+    return;
+  }
+
+  const targetFund = targetFundRes.data.data;
 
   targetAssetAccounts = targetFund.assets.map(asset => new PublicKey(asset.pubkey));
 }
@@ -68,16 +75,21 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
     assetAccounts.map(account => account.toString())
   );
 
-  const accountsInfo = getAccountsRes.data.result.value.map(
-    value => value as AccountInfo<Account>
-  );
-
   let investingToken: InvestingToken = {
     fullName: '',
     name: '',
     mint: '',
     amount: 0
   };
+
+  if(getAccountsRes.data.result === null || getAccountsRes.data.result === undefined)
+  {
+    return investingToken;
+  }
+
+  const accountsInfo = getAccountsRes.data.result.value.map(
+    value => value as AccountInfo<Account>
+  );
 
   accountsInfo.forEach(
     a => {

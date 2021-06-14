@@ -64,7 +64,12 @@ export class SolriseApiClient {
   public getFund(fundId: PublicKey) {
     return this._get<ApiResponse<Fund>>(
         `/funds/${fundId.toString()}`
-    );
+    )
+    .catch(e =>
+    {
+      console.log('get fund failed');
+      return FAILED_RESPONSE;
+    });
   }
 }
 

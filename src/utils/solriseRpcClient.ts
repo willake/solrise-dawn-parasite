@@ -64,7 +64,12 @@ export class SolriseRpcClient {
     return this._post<RpcResponse<AccountInfo<string[]>>>({
       method: 'getAccountInfo',
       params: [pubKey, {encoding: 'base64', commitment: 'confirmed'}]
-    } as RpcPayload).catch(e => console.log("get account info failed"))
+    } as RpcPayload).catch(e => 
+      {
+        console.log("get account info failed")
+
+        return FAILED_RESPONSE;
+      });
   }
 
   public getMultipleAccounts(accounts: string[])
@@ -72,7 +77,12 @@ export class SolriseRpcClient {
     return this._post<RpcResponse<any[]>>({
       method: 'getMultipleAccounts',
       params: [accounts, {encoding: 'jsonParsed', commitment: 'confirmed'}]
-    } as RpcPayload).catch(e => console.log("get multiple accounts info failed"))
+    } as RpcPayload).catch(e => 
+    {
+      console.log("get multiple accounts info failed")
+      
+      return FAILED_RESPONSE;
+    });
   }
 }
 
