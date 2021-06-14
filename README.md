@@ -40,9 +40,9 @@ CHAT_ID=${CHAT_ID} // 和機器人對話的 chat id
 簡單的步驟就是把 [BotFather](https://t.me/botfather) 加到好友，照著他寫的指示做，就會得到 token 了
 
 ### 如何取得 Chat ID
-先在 .env 中設定好 TELEGRAM_BOT_TOKEN，在 telegram 將機器人加入自己好友，再對自己的機器人講一句話，然後執行，讓程式去拿最新的紀錄
+先在 .env 中設定好 TELEGRAM_BOT_TOKEN，在 telegram 將機器人加入自己好友，再開啟一個 Group，只把機器人加進來，將它設為管理員，最後在群組裡講一句話，然後到下面的網址，將 ${token} 改為自己的 token，找到 chat 裡面的 id
 ```
-yarn collect-chat-id
+https://api.telegram.org/bot${token}/getUpdates
 ```
 最後就會得到 chat id，這樣設定好後需要更換投資方向的時候就能夠收到 telegram 機器人的通知
 
@@ -68,5 +68,4 @@ scheduleJob(
   '*/x * * * * *',
   () => main()
 );
-
 ```
