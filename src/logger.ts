@@ -1,11 +1,14 @@
 import { InvestingToken } from './models';
 
 export class Logger {
-    static logAccountStatus(myInvestingToken: InvestingToken, targetInvestingToken: InvestingToken) {
+
+    static logTime() {
         const now = new Date();
         console.log(`Now - ${now.toLocaleTimeString()}`);
-        console.log(`Mine - ${JSON.stringify(myInvestingToken)}`);
-        console.log(`Target - ${JSON.stringify(targetInvestingToken)}`);
+    }
+    
+    static logAccountStatus(title: string, investingToken: InvestingToken) {
+        console.log(`${title} - ${JSON.stringify(investingToken)}`);
     }
       
     static logChangeInvestingToken(tokenFullName: string, tokenName: string) {
