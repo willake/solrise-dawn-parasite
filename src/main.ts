@@ -37,15 +37,11 @@ async function main() {
   else {
     logAccountStatus(myInvestingToken, targetInvestingToken);
   
-    if(myInvestingToken.mint != targetInvestingToken.mint) 
-    {
-      sendNotification(targetInvestingToken.fullName, targetInvestingToken.name);
+    if(myInvestingToken.mint != targetInvestingToken.mint) {
+      logChangeInvestingToken(targetInvestingToken.fullName, targetInvestingToken.name);
     }
-    else
-    {
-      console.log(`=====================`);
-      console.log(`Noting to change`);
-      console.log(`=====================`);
+    else {
+      logNothingChanged();
     }
   }
 
@@ -53,21 +49,24 @@ async function main() {
 }
 
 async function fetchAccounts() {
-  const myFund = (await solriseApiClient.getFund(MY_FUND_ID)).data.data;
-  const targetFund = (await solriseApiClient.getFund(TARGET_FUND_ID)).data.data;
+  const myFundRes = await solriseApiClient.getFund(MY_FUND_ID); 
+  const targetFundRes = await solriseApiClient.getFund(TARGET_FUND_ID);
 
-  myAssetAccounts = myFund.assets.map(asset => new PublicKey(asset.pubkey));
-  targetAssetAccounts = targetFund.assets.map(asset => new PublicKey(asset.pubkey));
+  if(myFundRes.data.data === null ||targetFundRes.data.data === null) {
+    return;
+  }
+
+  const myFundAccount = myFundRes.data.data;
+  const targetFundAccount = targetFundRes.data.data;
+
+  myAssetAccounts = myFundAccount.assets.map(asset => new PublicKey(asset.pubkey));
+  targetAssetAccounts = targetFundAccount.assets.map(asset => new PublicKey(asset.pubkey));
 }
 
 async function getInvestingToken(assetAccounts: PublicKey[]) {
 
   const getAccountsRes = await solriseRpcClient.getMultipleAccounts(
     assetAccounts.map(account => account.toString())
-  );
-
-  const accountsInfo = getAccountsRes.data.result.value.map(
-    value => value as AccountInfo<Account>
   );
 
   let investingToken: InvestingToken = {
@@ -77,21 +76,31 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
     amount: 0
   };
 
-  accountsInfo.forEach(
-    a => {
+  if(getAccountsRes.data.result === null) {
+    return investingToken;
+  }
 
-      if(a) {
-        const info = a.data.parsed.info;
+  const accountsInfo = getAccountsRes.data.result.value.map(
+    value => value as AccountInfo<Account>
+  );
+
+  accountsInfo.forEach(
+    account => {
+
+      if(account) {
+        const info = account.data.parsed.info;
 
         if(info.tokenAmount.uiAmount > investingToken.amount) {
           const token = getToken(info.mint);
 
-          if(token)
-          {
+          if(token) {
             investingToken.fullName = token.fullName;
             investingToken.name = token.name.toUpperCase();
             investingToken.mint = info.mint;
             investingToken.amount = info.tokenAmount.uiAmount;
+          }
+          else {
+            logTokenNotFound();
           }
         }
       }
@@ -109,14 +118,24 @@ function logAccountStatus(myInvestingToken: InvestingToken, targetInvestingToken
   console.log(`Target - ${JSON.stringify(targetInvestingToken)}`);
 }
 
-function sendNotification(tokenFullName: string, tokenName: string) {
+function logChangeInvestingToken(tokenFullName: string, tokenName: string) {
   console.log(`=====================`);
   console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
   console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
   console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
   console.log(`=====================`);
 
-  bot.sendMessage(CHAT_ID, `請將資金轉移到 ${tokenFullName}(${tokenName})`)
+  bot.sendMessage(CHAT_ID, `請將資金轉移到 ${tokenFullName}(${tokenName})`);
+}
+
+function logNothingChanged() {
+  console.log(`=====================`);
+  console.log(`Noting changed`);
+  console.log(`=====================`);
+}
+
+function logTokenNotFound() {
+  console.log(`Token was not found, please update your token list`);
 }
 
 interface InvestingToken {
