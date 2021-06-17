@@ -2,6 +2,7 @@ import { scheduleJob } from "node-schedule";
 import * as TelegramBot from "node-telegram-bot-api";
 import { SolriseRpcClient, AccountInfo, Account } from "./utils/solriseRpcClient";
 import { getToken } from "./utils/tokens";
+import { Logger } from "./logger";
 import { PublicKey } from "@solana/web3.js";
 import { SolriseApiClient } from "./utils/solriseApiClient";
 import { config } from "dotenv";
@@ -35,13 +36,14 @@ async function main() {
     await fetchAccounts();
   }
   else {
-    logAccountStatus(myInvestingToken, targetInvestingToken);
+    Logger.logAccountStatus(myInvestingToken, targetInvestingToken);
   
     if(myInvestingToken.mint != targetInvestingToken.mint) {
-      logChangeInvestingToken(targetInvestingToken.fullName, targetInvestingToken.name);
+      Logger.logChangeInvestingToken(targetInvestingToken.fullName, targetInvestingToken.name);
+      bot.sendMessage(CHAT_ID, `請將資金轉移到 ${targetInvestingToken.fullName}(${targetInvestingToken.name})`);
     }
     else {
-      logNothingChanged();
+      Logger.logNothingChanged();
     }
   }
 
@@ -100,7 +102,7 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
             investingToken.amount = info.tokenAmount.uiAmount;
           }
           else {
-            logTokenNotFound();
+            Logger.logTokenNotFound();
           }
         }
       }
@@ -109,33 +111,6 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
   )
 
   return investingToken; 
-}
-
-function logAccountStatus(myInvestingToken: InvestingToken, targetInvestingToken: InvestingToken) {
-  const now = new Date();
-  console.log(`Now - ${now.toLocaleTimeString()}`);
-  console.log(`Mine - ${JSON.stringify(myInvestingToken)}`);
-  console.log(`Target - ${JSON.stringify(targetInvestingToken)}`);
-}
-
-function logChangeInvestingToken(tokenFullName: string, tokenName: string) {
-  console.log(`=====================`);
-  console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
-  console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
-  console.log(`請將資金轉移到 ${tokenFullName}(${tokenName})`);
-  console.log(`=====================`);
-
-  bot.sendMessage(CHAT_ID, `請將資金轉移到 ${tokenFullName}(${tokenName})`);
-}
-
-function logNothingChanged() {
-  console.log(`=====================`);
-  console.log(`Noting changed`);
-  console.log(`=====================`);
-}
-
-function logTokenNotFound() {
-  console.log(`Token was not found, please update your token list`);
 }
 
 interface InvestingToken {
