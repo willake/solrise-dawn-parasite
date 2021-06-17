@@ -22,7 +22,11 @@ export class Logger {
         console.log(`=====================`);
     }
       
-    static logTokenNotFound() {
+    static logTokenWasNotFound() {
         console.log(`Token was not found, please update your token list`);
+    }
+
+    static logNeedToFetchAccounts() {
+        console.log(`investing token was not found. now fetch newest accounts...`);
     }
 }

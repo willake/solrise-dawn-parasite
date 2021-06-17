@@ -1,5 +1,6 @@
 import { scheduleJob } from "node-schedule";
 import * as TelegramBot from "node-telegram-bot-api";
+import { InvestingToken } from './models';
 import { SolriseRpcClient, AccountInfo, Account } from "./utils/solriseRpcClient";
 import { getToken } from "./utils/tokens";
 import { Logger } from "./logger";
@@ -32,7 +33,7 @@ async function main() {
   console.log(`******************`);
 
   if(myInvestingToken.amount < 5 || targetInvestingToken.amount < 5) {
-    console.log(`investing token was not found. now fetch newest accounts...`);
+    Logger.logNeedToFetchAccounts();
     await fetchAccounts();
   }
   else {
@@ -102,7 +103,7 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
             investingToken.amount = info.tokenAmount.uiAmount;
           }
           else {
-            Logger.logTokenNotFound();
+            Logger.logTokenWasNotFound();
           }
         }
       }
@@ -111,13 +112,6 @@ async function getInvestingToken(assetAccounts: PublicKey[]) {
   )
 
   return investingToken; 
-}
-
-interface InvestingToken {
-  fullName: string,
-  name: string
-  mint: string,
-  amount: number
 }
 
 main()
