@@ -23,10 +23,10 @@ yarn
 
 ```
 ## .env
-MY_FUND_ID=${MY_FUND_ID} // 自己的 fund id
-TARGET_FUND_ID=${TARGET_FUND_ID} // 目標的 fund id
-TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN} // 自己創的 telegram 機器人 token
-CHAT_ID=${CHAT_ID} // 和機器人對話的 chat id
+MY_FUND_ID=TYPE_YOUR_FUND_ID // 自己的 fund id
+TARGET_FUND_ID=TYPE_TARGET_FUND_ID // 目標的 fund id
+TELEGRAM_BOT_TOKEN=YOUR_TELEGRAM_BOT_TOKEN // 自己創的 telegram 機器人 token
+CHAT_ID=YOUR_CHAT_ID // 和機器人對話的 chat id
 ```
 
 ### 如何找到 Fund ID
