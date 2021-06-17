@@ -5,7 +5,7 @@ import * as rax from 'retry-axios';
 const SOLRISE_RPC = 'https://api-solrise.devnet.rpcpool.com/';
 
 const FAILED_RESPONSE = {
-  data: { success: false, result: null},
+  data: { id: 0, jsonrpc: "2.0", result: null },
   status: 0,
   statusText: "failed",
   headers: "none",
@@ -65,6 +65,11 @@ export class SolriseRpcClient {
       method: 'getAccountInfo',
       params: [pubKey, {encoding: 'base64', commitment: 'confirmed'}]
     } as RpcPayload)
+    .catch(e => {
+        console.log("get account info failed")
+
+        return FAILED_RESPONSE;
+    });
   }
 
   public getMultipleAccounts(accounts: string[])
@@ -73,6 +78,11 @@ export class SolriseRpcClient {
       method: 'getMultipleAccounts',
       params: [accounts, {encoding: 'jsonParsed', commitment: 'confirmed'}]
     } as RpcPayload)
+    .catch(e => {
+      console.log("get multiple accounts failed")
+      
+      return FAILED_RESPONSE;
+    });
   }
 }
 
