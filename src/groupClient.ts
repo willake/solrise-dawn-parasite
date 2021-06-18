@@ -56,7 +56,7 @@ export class GroupClient {
         
             if(this.lastInvestingToken.mint != targetInvestingToken.mint) {
                 Logger.logChangeInvestingToken(targetInvestingToken.fullName, targetInvestingToken.name);
-                this.bot.sendMessage(this.chatId, `請將資金轉移到 ${targetInvestingToken.fullName}(${targetInvestingToken.name})`);
+                this._sendNotification(targetInvestingToken.fullName, targetInvestingToken.name);
             }
             else {
                 Logger.logNothingChanged();
@@ -78,6 +78,19 @@ export class GroupClient {
         const targetFundAccount = targetFundRes.data.data;
         
         this.targetAssetAccounts = targetFundAccount.assets.map(asset => new PublicKey(asset.pubkey));
+    }
+
+    private _sendNotification(tokenFullName: string, tokenName: string) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Taipei' });
+        const message = `${timeString} 將資金轉移到 ${tokenFullName}(${tokenName})`;
+        console.log(`=====================`);
+        console.log(message);
+        console.log(message);
+        console.log(message);
+        console.log(`=====================`);
+      
+        this.bot.sendMessage(this.chatId, message);
     }
       
     private async _getInvestingToken(assetAccounts: PublicKey[]) {
