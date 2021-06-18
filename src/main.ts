@@ -2,6 +2,7 @@ import * as TelegramBot from "node-telegram-bot-api";
 import { PublicKey } from "@solana/web3.js";
 import { config } from "dotenv";
 import { PrivateClient } from "./privateClient";
+import { logAllTokensInJson } from "./utils/tokens";
 
 config();
 
